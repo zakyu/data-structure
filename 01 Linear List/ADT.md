@@ -1,4 +1,8 @@
-# 线性表的类型定义
+# 线性表
+
+线性表是具有相同特性的数据元素的一个有限序列。
+
+## 线性表的抽象数据类型定义
 
 ADT List {  
     **数据对象**：D={ a<sub>i</sub> | a<sub>i</sub>属于ElemSet, (i=1,2,...,n, n≥0)}  
@@ -33,7 +37,7 @@ ADT List {
     **ListInsert(&L, i, e);**  
     初始条件：线性表L存在，1≤i≤ListLength(L)+1。  
     操作结果：在L的第i个位置之前插入新的数据元素e，L的长度加1。   
-    **ListDelete(&L, i);**  
+    **ListDelete(&L, i, &E);**  
     初始条件：线性表L存在，1≤i≤ListLength(L)。  
     操作结果：删除L的第i个数据元素，并用e返回其值，L的长度减1。  
     **ListTraverse(&L, visited());**  

@@ -5,7 +5,7 @@
     Initialize SqList L.
     Return whether it is successful.
  */
-_Bool * InitList(SqList * L)
+_Bool InitList(SqList * L)
 {
     if (!L) return 0;
     L->elem = (ElemType *) malloc(MAXLEN*sizeof(ElemType));
@@ -87,13 +87,14 @@ _Bool ListInsert(SqList * L, int i, ElemType e)
     return 1;
 }
 
-/* Delete the i-th element from SqList L. */
-_Bool ListDelete(SqList * L, int i)
+/* Delete the i-th element from SqList L and return it through element e. */
+_Bool ListDelete(SqList * L, int i, ElemType * e)
 {
     if (!L) return 0;
     if (L->length == 0) return 0;
     if (i<1 || i >L->length+1) return 0;
 
+    *e = L->elem[i];
     for (int j = i; j < L->length-1; j++)
         L->elem[i] = L->elem[i+1];
     L->length--;

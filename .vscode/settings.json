@@ -4,6 +4,9 @@
         "limits": "c",
         "stdio.h": "c",
         "sqlist.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "linklist.h": "c",
+        "dullinklist.h": "c",
+        "stack.h": "c"
     }
 }

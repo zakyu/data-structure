@@ -15,7 +15,7 @@ typedef struct
 typedef _Bool (* Compare)(SqList, int, ElemType*);
 
 /* Initialize SqList L. Return whether it is successful. */
-_Bool * InitList(SqList * L);
+_Bool InitList(SqList * L);
 
 /* Destroy SqList L. Return whether it is successful. */
 _Bool DestroyList(SqList * L);
@@ -42,5 +42,5 @@ int LocateElem(SqList L, ElemType * e, Compare compare);
 _Bool ListInsert(SqList * L, int i, ElemType e);
 
 /* Delete the i-th element from SqList L. */
-_Bool ListDelete(SqList * L, int i);
+_Bool ListDelete(SqList * L, int i, ElemType * e);
 #endif
