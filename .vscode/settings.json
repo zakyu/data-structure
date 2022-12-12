@@ -7,6 +7,14 @@
         "stdlib.h": "c",
         "linklist.h": "c",
         "dullinklist.h": "c",
-        "stack.h": "c"
+        "stack.h": "c",
+        "cmath": "c",
+        "compare": "c",
+        "concepts": "c",
+        "type_traits": "c",
+        "*.tcc": "c",
+        "typeinfo": "c",
+        "stdbool.h": "c",
+        "cslinklist.h": "c"
     }
 }

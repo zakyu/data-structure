@@ -5,11 +5,11 @@ _Bool InitStack(SqStack S)
 {
     if (!S) return 0;
 
-    S->base = (SqStack *)malloc(MAXLEN*sizeof(SqStack));
+    S->base = (SqStack *)malloc(MAXSIZE*sizeof(SqStack));
     if (!S->base) return 0;
 
     S->top = S->base;
-    S->stacksize = MAXLEN;
+    S->stacksize = MAXSIZE;
     
     return 1;
 }

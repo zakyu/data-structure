@@ -1,43 +1,42 @@
-#ifndef DULLINKLIST_H_
-#define DULLINKLIST_H_ 1
+#ifndef LINKLIST_H_
+#define LINKLIST_H_ 1
 
 typedef int ElemType;
 
 struct node
 {
     ElemType data;
-    struct node * prior;
     struct node * next;
 };
-typedef struct node DLinkNode;
-typedef struct node * DLinkList;
+typedef struct node LinkNode;
+typedef struct node * LinkList;
 
-void CreateListF(DLinkList L, ElemType arr[], int size);
+void CreateListF(LinkList L, ElemType arr[], int size);
 
-void CreateListR(DLinkList L, ElemType arr[], int size);
+void CreateListR(LinkList L, ElemType arr[], int size);
 
 /* Initialize L. */
-void * InitList(DLinkList L);
+void * InitList(LinkList L);
 
 /* Destroy L. */
-void DestroyList(DLinkList L);
+void DestroyList(LinkList L);
 
 /* Return whether L is empty. */
-bool ListEmpty(const DLinkList L);
+bool ListEmpty(const LinkList L);
 
 /* Return the length of L */
-int ListLength(const DLinkList L);
+int ListLength(const LinkList L);
 
 /*
     Get the i-th element in L and return it through element e.
     Return whether the element is returned successfully.
  */
-bool GetElem(const DLinkList L, int i, ElemType * e);
+bool GetElem(const LinkList L, int i, ElemType * e);
 
 struct elem_info
 {
     int index;
-    DLinkNode * dLinkNode;
+    LinkNode * linkNode;
 };
 typedef struct elem_info ELEM_INFO;
 
@@ -45,18 +44,18 @@ typedef struct elem_info ELEM_INFO;
 typedef _Bool (* Compare)(ElemType, ElemType);
 
 /* Find the position of element e in L by the rules of the function compare */
-ELEM_INFO * LocateElem(const DLinkList L, ElemType e, Compare compare);
+ELEM_INFO * LocateElem(const LinkList L, ElemType e, Compare compare);
 
 /* Insert the element e into the i-th position of L. */
-bool ListInsert(DLinkList L, int i, ElemType e);
+bool ListInsert(LinkList L, int i, ElemType e);
 
 /* Delete the i-th element from L. */
-bool ListDelete(DLinkList L, int i, ElemType * e);
+bool ListDelete(LinkList L, int i, ElemType * e);
 
 /* Operate on element e */
 typedef ElemType (* Operate)(ElemType * e);
 
 /* Iterate over the elements of L and process the elements with function operate */
-void ListTraverse(DLinkList L, Operate operate);
+void ListTraverse(LinkList L, Operate operate);
 
 #endif

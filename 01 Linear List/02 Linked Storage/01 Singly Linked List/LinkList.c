@@ -1,55 +1,49 @@
 #include <stdlib.h>
 #include <stdbool.h>
-#include "DulLinkList.h"
+#include "LinkList.h"
 
-void CreateListF(DLinkList L, ElemType arr[], int size)
+void CreateListF(LinkList L, ElemType arr[], int size)
 {
-    L = (DLinkList) malloc(sizeof(DLinkList));
-    L->prior = L->next = NULL;
+    L = (LinkList *) malloc(sizeof(LinkList));
+    L->next = NULL;
 
-    DLinkNode * newNode;
+    LinkNode * newNode;
     for (int i = 0; i < size; i++)
     {
-        newNode = (DLinkNode *) malloc(sizeof(DLinkNode));
+        newNode = (LinkNode *) malloc(sizeof(LinkNode));
         newNode->data = arr[i];
-        if (L->next)
-            L->next->prior = newNode;
         newNode->next = L->next;
-        newNode->prior = L;
         L->next = newNode;
     }
 }
 
-void CreateListR(DLinkList L, ElemType arr[], int size)
+void CreateListR(LinkList L, ElemType arr[], int size)
 {
-    L = (DLinkList) malloc(sizeof(DLinkList));
-    
-    DLinkNode * lastNode = L;
-    DLinkNode * newNode;
+    L = (LinkList *) malloc(sizeof(LinkList));
+
+    LinkNode * last = L;
+    LinkNode * newNode;
     for (int i = 0; i < size; i++)
     {
-        newNode = (DLinkNode *) malloc(sizeof(DLinkNode));
+        newNode = (LinkNode *) malloc(sizeof(LinkNode));
         newNode->data = arr[i];
-        
-        lastNode->next = newNode;
-        newNode->prior = lastNode;
-        lastNode = newNode;
+        last->next = newNode;
+        last = newNode;
     }
-    lastNode->next = NULL;
+    last->next = NULL;
 }
 
 /* Initialize L. */
-void * InitList(DLinkList L)
+void * InitList(LinkList L)
 {
-    L = (DLinkList *) malloc(sizeof(DLinkList));
-    L->prior = NULL;
+    L = (LinkList *) malloc(sizeof(LinkList));
     L->next = NULL;
 }
 
 /* Destroy L. */
-void DestroyList(DLinkList L)
+void DestroyList(LinkList L)
 {
-    DLinkList * temp;
+    LinkNode * temp;
     while(L)
     {
         temp = L;
@@ -59,16 +53,16 @@ void DestroyList(DLinkList L)
 }
 
 /* Return whether L is empty. */
-bool ListEmpty(const DLinkList L)
+bool ListEmpty(const LinkList L)
 {
     return L->next == NULL;
 }
 
 /* Return the length of L */
-int ListLength(const DLinkList L)
+int ListLength(const LinkList L)
 {
     int len = 0;
-    DLinkNode * temp = L;
+    LinkNode * temp = L;
     while (temp->next)
     {
         len++;
@@ -81,9 +75,9 @@ int ListLength(const DLinkList L)
     Get the i-th element in L and return it through element e.
     Return whether the element is returned successfully.
  */
-bool GetElem(const DLinkList L, int i, ElemType * e)
+bool GetElem(const LinkList L, int i, ElemType * e)
 {
-    DLinkNode * temp = L;
+    LinkNode * temp = L;
 
     int index = 0;
     while (index < i && temp)
@@ -95,16 +89,16 @@ bool GetElem(const DLinkList L, int i, ElemType * e)
     if (!temp) return false;
 
     *e = temp->data;
-    return true;   
+    return true;
 }
 
 /* Find the position of element e in L by the rules of the function compare */
-ELEM_INFO * LocateElem(const DLinkList L, ElemType e, Compare compare)
+ELEM_INFO * LocateElem(const LinkList L, ElemType e, Compare compare)
 {
     ELEM_INFO * info = {-1, NULL};
     int index = 1;
 
-    DLinkNode * temp = L->next;
+    LinkNode * temp = L->next;
     while (temp && !compare(temp->data, e))
     {
         temp = temp->next;
@@ -113,58 +107,53 @@ ELEM_INFO * LocateElem(const DLinkList L, ElemType e, Compare compare)
     if (temp)
     {
         info->index = index;
-        info->dLinkNode = temp;
+        info->linkNode = temp;
     }
-    return info; 
+    return info;
 }
 
 /* Insert the element e into the i-th position of L. */
-bool ListInsert(DLinkList L, int i, ElemType e)
+bool ListInsert(LinkList L, int i, ElemType e)
 {
     int index = 0;
-    DLinkNode * temp = L;
-    while (index < i && temp)
+    LinkNode * temp = L;
+    while (index < i-1 && temp)
     {
         index++;
         temp = temp->next;
     }
-    if (!temp) return 0;
-    
-    DLinkNode * newNode = (DLinkNode *) malloc(sizeof(DLinkNode));
+    if (!temp) return false;
+
+    LinkNode * newNode = (LinkNode *) malloc(sizeof(LinkNode));
     newNode->data = e;
-    if (temp->next)
-        temp->next->prior = newNode;
     newNode->next = temp->next;
-    newNode->prior = temp;
     temp->next = newNode;
     return true;
 }
 
 /* Delete the i-th element from L. */
-bool ListDelete(DLinkList L, int i, ElemType * e)
+bool ListDelete(LinkList L, int i, ElemType * e)
 {
-    int index = 0;
-    DLinkNode * temp = L;
-    while (index < i && temp)
+    int index = 0; 
+    LinkNode * temp = L;
+    while (index < i-1 && temp)
     {
         index++;
         temp = temp->next;
     }
     if (!temp || !temp->next) return false;
-    
-    DLinkNode * target = temp->next;
+
+    LinkNode * target = temp->next;
     *e = target->data;
-    if (target->next)
-        target->next->prior = temp;
     temp->next = target->next;
     free(target);
     return true;
 }
 
 /* Iterate over the elements of L and process the elements with function operate */
-void ListTraverse(DLinkList L, Operate operate)
+void ListTraverse(LinkList L, Operate operate)
 {
-    DLinkNode * temp = L;
+    LinkNode * temp = L;
     while (temp)
     {
         operate(&temp->data);

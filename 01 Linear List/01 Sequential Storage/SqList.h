@@ -1,46 +1,51 @@
 #ifndef SQLIST_H_
 #define SQLIST_H_ 1
-
-#define MAXLEN 100
+#define MAXSIZE 100
 
 typedef char ElemType;
 
 typedef struct
 {
-    ElemType * elem;
+    ElemType data[MAXSIZE];
     int length;
 } SqList;
 
-/* Comparing element e and elements of SqList L by some rules */
-typedef _Bool (* Compare)(SqList, int, ElemType*);
+void CreateList(SqList * L, const ElemType arr[], int size);
 
-/* Initialize SqList L. Return whether it is successful. */
-_Bool InitList(SqList * L);
+/* Initialize L. */
+void InitList(SqList * L);
 
-/* Destroy SqList L. Return whether it is successful. */
-_Bool DestroyList(SqList * L);
+/* Destroy L. */
+void DestroyList(SqList * L);
 
-/* Clear SqList L. Return whether it is successful. */
-_Bool ClearList(SqList * L);
+/* Return whether L is empty. */
+bool ListEmpty(const SqList * L);
 
-/* Return whether SqList L is empty. */
-_Bool ListEmpty(SqList L);
-
-/* Return the length of SqList L */
-int ListLength(SqList L);
+/* Return the length of L */
+int ListLength(const SqList * L);
 
 /*
-    Get the i-th element in SqList L and return it through element e.
+    Get the i-th element in L and return it through element e.
     Return whether the element is returned successfully.
  */
-_Bool GetElem(SqList L, int i, ElemType * e);
+bool GetElem(const SqList * L, int i, ElemType * e);
 
-/* Find the position of element e in SqList L by the rules of the function compare */
-int LocateElem(SqList L, ElemType * e, Compare compare);
+/* Comparing element e and elements of L by some rules */
+typedef bool (* Compare)(ElemType, ElemType);
 
-/* Insert the element e into the i-th position of SqList L. */
-_Bool ListInsert(SqList * L, int i, ElemType e);
+/* Find the position of element e in L by the rules of the function compare */
+int LocateElem(const SqList * L, ElemType e, Compare compare);
 
-/* Delete the i-th element from SqList L. */
-_Bool ListDelete(SqList * L, int i, ElemType * e);
+/* Insert the element e into the i-th position of L. */
+bool ListInsert(SqList * L, int i, ElemType e);
+
+/* Delete the i-th element from L. */
+bool ListDelete(SqList * L, int i, ElemType * e);
+
+/* Operate on element e */
+typedef ElemType (* Operate)(ElemType * e);
+
+/* Iterate over the elements of L and process the elements with function operate */
+void ListTraverse(SqList * L, Operate operate);
+
 #endif

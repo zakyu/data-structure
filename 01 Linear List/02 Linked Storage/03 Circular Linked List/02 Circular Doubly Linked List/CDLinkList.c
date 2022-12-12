@@ -1,11 +1,11 @@
 #include <stdlib.h>
 #include <stdbool.h>
-#include "DulLinkList.h"
+#include "CDLinkList.h"
 
 void CreateListF(DLinkList L, ElemType arr[], int size)
 {
     L = (DLinkList) malloc(sizeof(DLinkList));
-    L->prior = L->next = NULL;
+    L->prior = L->next = L;
 
     DLinkNode * newNode;
     for (int i = 0; i < size; i++)
@@ -35,15 +35,15 @@ void CreateListR(DLinkList L, ElemType arr[], int size)
         newNode->prior = lastNode;
         lastNode = newNode;
     }
-    lastNode->next = NULL;
+    lastNode->next = L;
 }
 
 /* Initialize L. */
 void * InitList(DLinkList L)
 {
     L = (DLinkList *) malloc(sizeof(DLinkList));
-    L->prior = NULL;
-    L->next = NULL;
+    L->prior = L;
+    L->next = L;
 }
 
 /* Destroy L. */
@@ -61,7 +61,7 @@ void DestroyList(DLinkList L)
 /* Return whether L is empty. */
 bool ListEmpty(const DLinkList L)
 {
-    return L->next == NULL;
+    return L->next == L;
 }
 
 /* Return the length of L */
@@ -69,7 +69,7 @@ int ListLength(const DLinkList L)
 {
     int len = 0;
     DLinkNode * temp = L;
-    while (temp->next)
+    while (temp->next != L)
     {
         len++;
         temp = temp->next;
@@ -86,13 +86,13 @@ bool GetElem(const DLinkList L, int i, ElemType * e)
     DLinkNode * temp = L;
 
     int index = 0;
-    while (index < i && temp)
+    while (index < i && temp != L)
     {
         index ++;
         temp = temp->next;
     }
 
-    if (!temp) return false;
+    if (temp == L) return false;
 
     *e = temp->data;
     return true;   
@@ -105,12 +105,12 @@ ELEM_INFO * LocateElem(const DLinkList L, ElemType e, Compare compare)
     int index = 1;
 
     DLinkNode * temp = L->next;
-    while (temp && !compare(temp->data, e))
+    while (temp != L && !compare(temp->data, e))
     {
         temp = temp->next;
         index++;
     }
-    if (temp)
+    if (temp != L)
     {
         info->index = index;
         info->dLinkNode = temp;
@@ -123,16 +123,16 @@ bool ListInsert(DLinkList L, int i, ElemType e)
 {
     int index = 0;
     DLinkNode * temp = L;
-    while (index < i && temp)
+    while (index < i && temp != L)
     {
         index++;
         temp = temp->next;
     }
-    if (!temp) return 0;
+    if (temp == L) return 0;
     
     DLinkNode * newNode = (DLinkNode *) malloc(sizeof(DLinkNode));
     newNode->data = e;
-    if (temp->next)
+    if (temp->next != L)
         temp->next->prior = newNode;
     newNode->next = temp->next;
     newNode->prior = temp;
@@ -145,16 +145,16 @@ bool ListDelete(DLinkList L, int i, ElemType * e)
 {
     int index = 0;
     DLinkNode * temp = L;
-    while (index < i && temp)
+    while (index < i && temp != L)
     {
         index++;
         temp = temp->next;
     }
-    if (!temp || !temp->next) return false;
-    
+    if (temp == L || temp->next == L) return false;
+
     DLinkNode * target = temp->next;
     *e = target->data;
-    if (target->next)
+    if (target->next != L)
         target->next->prior = temp;
     temp->next = target->next;
     free(target);
@@ -165,7 +165,7 @@ bool ListDelete(DLinkList L, int i, ElemType * e)
 void ListTraverse(DLinkList L, Operate operate)
 {
     DLinkNode * temp = L;
-    while (temp)
+    while (temp != L)
     {
         operate(&temp->data);
         temp = temp->next;

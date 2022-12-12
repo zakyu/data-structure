@@ -1,103 +1,94 @@
 #include <stdlib.h>
-#include <SqList.h>
+#include <stdbool.h>
+#include "SqList.h"
 
-/*
-    Initialize SqList L.
-    Return whether it is successful.
- */
-_Bool InitList(SqList * L)
+void CreateList(SqList * L, const ElemType arr[], int size)
 {
-    if (!L) return 0;
-    L->elem = (ElemType *) malloc(MAXLEN*sizeof(ElemType));
-    if(!L->elem) return 0;
+    L = (SqList *) malloc(sizeof(SqList));
+
+    for (int i = 0; i < size; i++)
+        L->data[i] = arr[i];
+    L->length = size;
+}
+
+/* Initialize SqList L. */
+void InitList(SqList * L)
+{
+    L = (SqList *) malloc(sizeof(SqList));
     L->length = 0;
-    return 1;
 }
 
-/*
-    Destroy SqList L.
-    Return whether it is successful.
- */
-_Bool DestroyList(SqList * L)
+/* Destroy SqList L. */
+void DestroyList(SqList * L)
 {
-    if (!L) return 0;
-    free(L->elem); 
-    return 1;
+    free(L);
 }
 
-/*
-    Clear SqList L.
-    Return whether it is successful.
- */
-_Bool ClearList(SqList * L)
+/* Return whether SqList L is empty. */
+bool ListEmpty(const SqList * L)
 {
-    if(!L) return 0;
-    L->length = 0;
-    return 1;
+    return L->length == 0;
 }
 
-/*
-    Return whether SqList L is empty.
- */
-_Bool ListEmpty(SqList L)
+/* Return the length of SqList L */
+int ListLength(const SqList * L)
 {
-    return L.length == 0;
-}
-
-/*
-    Return the length of SqList L
- */
-int ListLength(SqList L)
-{
-    return L.length;
+    return L->length;
 }
 
 /*
     Get the i-th element in SqList L and return it through element e.
     Return whether the element is returned successfully.
  */
-_Bool GetElem(SqList L, int i, ElemType * e)
+bool GetElem(const SqList * L, int i, ElemType * e)
 {
-    if (i < 1 || i > L.length) return 0;
-    e = L.elem[i-1];
-    return 1;
+    if (i < 1 || i > L->length)
+        return false;
+    e = L->data[i-1];
+    return true;
 }
 
 /* Find the position of element e in SqList L by the rules of the function compare */
-int LocateElem(SqList L, ElemType * e, Compare compare)
+int LocateElem(const SqList * L, ElemType e, Compare compare)
 {
-    for (int i = 0; i < L.length; i++)
-        if (compare(L, i, e)) return i+1;
-    return -1;
+    for (int i = 0; i < L->length; i++)
+        if (compare(L->data[i], e)) return i+1;
+    return 0;
 }
 
 /* Insert the element e into the i-th position of SqList L. */
-_Bool ListInsert(SqList * L, int i, ElemType e)
+bool ListInsert(SqList * L, int i, ElemType e)
 {
-    if (!L) return 0;
-    if (L->length == MAXLEN) return 0;
-    if (i<1 || i >L->length+1) return 0;
+    if (L->length == MAXSIZE) return false;
+    if (i < 1 || i > L->length+1) return false;
 
-    for (int j = L->length-1; j > 0; j--)
-        L->elem[j+1] = L->elem[j];
+    for (int j = L->length; j > i; j--)
+        L->data[j] = L->data[j-1];
     
-    L->elem[i-1] = e;
+    L->data[i] = e;
     L->length++;
 
-    return 1;
+    return true;
 }
 
 /* Delete the i-th element from SqList L and return it through element e. */
-_Bool ListDelete(SqList * L, int i, ElemType * e)
+bool ListDelete(SqList * L, int i, ElemType * e)
 {
-    if (!L) return 0;
-    if (L->length == 0) return 0;
-    if (i<1 || i >L->length+1) return 0;
+    if (L->length == 0) return false;
+    if (i<1 || i >L->length+1) return false;
 
-    *e = L->elem[i];
+    *e = L->data[--i];
     for (int j = i; j < L->length-1; j++)
-        L->elem[i] = L->elem[i+1];
+        L->data[j] = L->data[j+1];
+
     L->length--;
 
-    return 1;
+    return true;
+}
+
+
+void ListTraverse(SqList * L, Operate operate)
+{
+    for (int i = 0; i < L->length; i++)
+        operate(&L->data[i]);
 }
