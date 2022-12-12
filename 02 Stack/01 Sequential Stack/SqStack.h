@@ -1,29 +1,32 @@
-#ifndef STACK_H_
-#define STACK_H_ 1
-#define MAXLEN 100
+#ifndef SQSTACK_H_
+#define SQSTACK_H_ 1
+
+#define MAXSIZE 100
+
 typedef int ElemType;
 
 struct stack {
-    ElemType * top;
-    ElemType * base;
-    int stacksize;
+    ElemType data[MAXSIZE];
+    int top;
 };
 typedef struct stack * SqStack;
 
-_Bool InitStack(SqStack S);
+/* Initialize stack S. */
+void InitStack(SqStack S);
 
-_Bool StackEmpty(SqStack S);
+/* Destroy stack S. */
+void DestroyStack(SqStack S);
 
-_Bool DestroyStack(SqStack S);
+/* Whether stack S is empty */
+bool StackEmpty(SqStack S);
 
-int StackLength(SqStack S);
+/* Push element e onto stack S */
+bool Push(SqStack S, ElemType e);
 
-_Bool GetTop(SqStack S, ElemType * e);
+/* Pop the top element of the stack S */
+bool Pop(SqStack S, ElemType * e);
 
-_Bool ClearStack(SqStack S);
-
-_Bool Push(SqStack S, ElemType e);
-
-_Bool Pop(SqStack S, ElemType * e);
+/* Get the top element of the stack S */
+bool GetTop(SqStack S, ElemType * e);
 
 #endif

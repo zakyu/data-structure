@@ -1,79 +1,51 @@
 #include <stdlib.h>
+#include <stdbool.h>
 #include "SqStack.h"
 
-_Bool InitStack(SqStack S)
+/* Initialize stack S. */
+void InitStack(SqStack S)
 {
-    if (!S) return 0;
-
-    S->base = (SqStack *)malloc(MAXSIZE*sizeof(SqStack));
-    if (!S->base) return 0;
-
-    S->top = S->base;
-    S->stacksize = MAXSIZE;
-    
-    return 1;
+    S = (SqStack)malloc(sizeof(SqStack));
+    S->top = -1;
 }
 
-_Bool StackEmpty(SqStack S)
+/* Destroy stack S. */
+void DestroyStack(SqStack S)
 {
-    if (!S->base) return 0;
-    return S->base == S->top;
+    free(S);
 }
 
-int StackLength(SqStack S)
+/* Whether stack S is empty */
+bool StackEmpty(SqStack S)
 {
-    if (!S->base) return 0;
-    return S->top - S->base;
+    return S->top == -1;
 }
 
-_Bool ClearStack(SqStack S)
+/* Push element e onto stack S */
+bool Push(SqStack S, ElemType e)
 {
-    if (!S) return 0;
-    if (!S->base) return 0;
-    S->top = S->base;
-    return 1;
-}
-
-_Bool DestroyStack(SqStack S)
-{
-    if (!S) return 0;
-    if (!S->base) return 0;
-    free(S->base);
-    S->stacksize = 0;
-    S->base = S->top = NULL;
-    return 1;
-}
-
-_Bool Push(SqStack S, ElemType e)
-{
-    if (!S) return 0;
-    if (!S->base) return 0;
-    if (S->top-S->base == S->stacksize) return 0;
-
-    *(S->top+1) = e;
+    if (S->top == MAXSIZE -1)
+        return false;
     S->top++;
-
-    return 1;
+    S->data[S->top] = e;
+    return true;
 }
 
-_Bool Pop(SqStack S, ElemType * e)
+/* Pop the top element of the stack S */
+bool Pop(SqStack S, ElemType * e)
 {
-    if (!S) return 0;
-    if (!S->base) return 0;
-    if (S->top == S->base) return 0;
-    
-    *e = *S->top;
+    if (S->top == -1)
+        return false;
+    *e = S->data[S->top];
     S->top--;
-
-    return 1;
+    return true;
 }
 
-_Bool GetTop(SqStack S, ElemType * e)
+/* Get the top element of the stack S */
+bool GetTop(SqStack S, ElemType * e)
 {
-    if (!S) return 0;
-    if (!S->base) return 0;
-
-    *e = *S->top;
-
-    return 1;
+    if (S->top == -1)
+        return false;
+    *e = S->data[S->top];
+    return true;
 }
