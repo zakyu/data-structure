@@ -15,6 +15,7 @@
         "*.tcc": "c",
         "typeinfo": "c",
         "stdbool.h": "c",
-        "cslinklist.h": "c"
+        "cslinklist.h": "c",
+        "sqqueue.h": "c"
     }
 }

@@ -1,12 +1,12 @@
 #include <stdlib.h>
 #include <stdbool.h>
-#include "SqQueue.h"
+#include "CSqQueue.h"
 
 /* Initialize queue Q */
 void InitQueue(SqQueue * Q)
 {
     Q = (SqQueue *) malloc(sizeof(SqQueue));
-    Q->front = Q->rear = -1;
+    Q->front = Q->rear = 0;
 }
 
 /* Destroy queue Q */
@@ -24,9 +24,9 @@ bool QueueEmpty(const SqQueue * Q)
 /* Put element e into queue Q */
 bool enQueue(SqQueue * Q, ElemType e)
 {
-    if (Q->rear == MAXSIZE-1)
+    if ((Q->rear+1)%MAXSIZE == Q->front)
         return false;
-    Q->rear++;
+    Q->rear = (Q->rear+1)%MAXSIZE;
     Q->data[Q->rear] = e;
     return true;
 }
@@ -36,7 +36,7 @@ bool deQueue(SqQueue * Q, ElemType * e)
 {
     if (Q->front == Q->rear)
         return false;
-    Q->front++;
+    Q->front = (Q->front+1)%MAXSIZE;
     *e = Q->data[Q->front];
     return true;
 }

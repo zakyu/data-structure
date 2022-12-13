@@ -12,7 +12,7 @@ void InitStack(LinkStack S)
 /* Destroy stack S. */
 void DestroyStack(LinkStack S)
 {
-    LinkNode * temp = S;
+    LinkNode * temp;
     while (S)
     {
         temp = S;
